@@ -1,74 +1,77 @@
-// JavaScript source code
+let computerScore = 0;
+let playerScore = 0;
+const choices = ["Rock", "Paper", "Scissors"];
 
-// Create a function called computerPlay that will randomly return either ‘Rock’, ‘Paper’ or ‘Scissors’. We’ll use this function in the game to make the computer’s play.
+ // Computer Logic
+function computerPlay(){
+    const random = Math.floor(Math.random() * choices.length);
+    return(choices[random]);
+};
 
-// Write a function that plays a single round of Rock Paper Scissors. The function should take two parameters - the playerSelection and computerSelection - 
-// and then return a string that declares the winner of the round like so: "You Lose! Paper beats Rock"
-// ^ function singleRound(playerSelection, computerSelection){}
+// DOM stuff
 
-// Return the results of the function that plays the round, not console.log it directly
+let displayPlayerScore = document.createElement("p");
+let displayComputerScore = document.createElement("p");
+let displayWinner = document.createElement("p");
 
-// Place the round function in a new function called game() that plays for 5 rounds, keeps score and reports a winner or loser at the end.
-	// At this point you should be using console.log() to display the results of each round and the winner at the end.
-	// Use prompt() to get input from the user.
+displayPlayerScore.setAttribute("id", "displayPlayerScore");
+displayComputerScore.setAttribute("id", "displayComputerScore");
+displayWinner.setAttribute("id", "displayWinner");
 
+document.body.appendChild(displayPlayerScore);
+document.body.appendChild(displayComputerScore);
+document.body.appendChild(displayWinner);
 
+document.getElementById("displayPlayerScore").innerHTML = "Player score: " + playerScore;
+document.getElementById("displayComputerScore").innerHTML = "Computer score: " + computerScore;
 
-
-		// Randomly chooses between Rock, Paper and Scissors for the Computer's Input
-		function computerPlay(){
-			const choices = ["Rock", "Paper", "Scissors"];
-			const random = Math.floor(Math.random() * choices.length);
-			return(choices[random]);
-		};
-
-		// Prompts the user for their input
-		function getPlayerInput(){
-			let playerInput = prompt("Rock, Paper or Scissors?", "");
-			return (playerInput);
+function round(playerInput){
+    let computerInput = computerPlay();
+		if(computerScore == 5 || playerScore == 5){
+			console.log("No");
+		}
+		else if (playerInput === choices[0] && computerInput === choices[2] || playerInput === choices[1] && computerInput === choices[0] || playerInput === choices[2] && computerInput === choices[1]){
+			playerScore = playerScore + 1;
+			document.getElementById("displayPlayerScore").innerHTML = "Player score: " + playerScore;
+		}
+		else if(playerInput === computerInput){
+			playerScore = playerScore + 1;
+			computerScore = computerScore + 1;
+			document.getElementById("displayPlayerScore").innerHTML = "Player score: " + playerScore;
+			document.getElementById("displayComputerScore").innerHTML = "Computer score: " + computerScore;
+		}
+		else if(computerInput === choices[0] && playerInput === choices[2] || computerInput === choices[1] && playerInput === choices[0] || computerInput === choices[2] && playerInput === choices[1]){
+			computerScore = computerScore + 1;
+			document.getElementById("displayComputerScore").innerHTML = "Computer score: " + computerScore;
 		}
 
-		function game(){
-			let computerScore = 0;
-			let playerScore = 0;
-			const rock = "Rock";
-			const paper = "Paper";
-			const scissors = "Scissors";
-			const invalidInput = "Invalid input";
-
-			function round(playerInput, computerInput){
-					if (playerInput.toLowerCase() === rock.toLowerCase() && computerInput.toLowerCase() === scissors.toLowerCase() || playerInput.toLowerCase() === paper.toLowerCase() && computerInput.toLowerCase() === rock.toLowerCase() || playerInput.toLowerCase() === scissors.toLowerCase() && computerInput.toLowerCase() === paper.toLowerCase()){
-						console.log(`Player Score: ${playerScore = playerScore + 1} Computer Score: ${computerScore}` );
-						return (`You win the round: ${playerInput} beats ${computerInput}!`);
-					}
-					else if(playerInput.toLowerCase() === computerInput.toLowerCase()){
-					    console.log(`Player Score: ${playerScore = playerScore + 1}, Computer Score: ${computerScore = computerScore + 1}`);
-						return(`Tied round!`);
-					}
-					else if(computerInput.toLowerCase() === rock.toLowerCase() && player.toLowerCase() === scissors.toLowerCase() || computerInput.toLowerCase() === paper.toLowerCase() && playerInput.toLowerCase() === rock.toLowerCase() || computerInput.toLowerCase() === scissors.toLowerCase() && playerInput.toLowerCase() === paper.toLowerCase()){
-						console.log(`Player Score: ${playerScore} Computer Score: ${computerScore = computerScore + 1}`);
-						return(`Computer wins the round: ${computerInput} beats ${playerInput}!`);
-					}
-					else{
-						return(invalidInput);
-					}
+			if (playerScore == 5){
+				document.getElementById("displayWinner").innerHTML = "Player Wins!";
 			}
-
-			for (let i = 0; i <= 4; i++){
-				let x = getPlayerInput();
-				let y = computerPlay();
-				console.log(round(x,y));
+			else if(computerScore == 5){
+				document.getElementById("displayWinner").innerHTML = "Computer Wins!";
 			}
+}
+
+
+// DOM manipulation
+document.getElementById("rockInput").addEventListener("click", function(){
+    round("Rock");
+});
+
+		
+document.getElementById("paperInput").addEventListener("click", function(){
+    round("Paper");
+});
 			
-			if(computerScore > playerScore){
-				return(`The Computer wins the game with a score of: ${computerScore}!`);
-			}
-			else if(computerScore < playerScore){
-				return(`The Player wins the game with a score of: ${playerScore}!`)
-			}
-			else{
-				return(`Tie game! Computer Score:${computerScore} | Player Score:${playerScore}`)
-			}
-			computerScore = 0;
-			playerScore = 0;
-		}
+document.getElementById("scissorsInput").addEventListener("click", function(){
+    round("Scissors");
+});
+
+document.getElementById("reset").addEventListener("click", function(){
+	computerScore = 0;
+	playerScore = 0;
+	document.getElementById("displayPlayerScore").innerHTML = "Player score: " + playerScore;
+	document.getElementById("displayComputerScore").innerHTML = "Computer score: " + computerScore;
+	document.getElementById("displayWinner").innerHTML = "";
+});
